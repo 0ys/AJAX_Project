@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>XMLHttpRequest</title>
+		<script>
+		    var xhr = null;
+		    function getXHR(){
+				xhr = new XMLHttpRequest();
+			}
+		    
+		    function getData(){
+				var na = document.getElementById("name");
+				var addr = document.getElementById("address");
+				var param = "?name="+na.value+"&address="+addr.value;
+				// ?와 &로 parameter를 구분해서 받는다.
+				
+				getXHR();
+				// 서버 역할을 하는 jsp파일을 불러옴
+				xhr.open('get', 'paramTest.jsp' + param, true);
+				xhr.onreadystatechange = callback;
+				xhr.send(null);
+				
+				na.value = "";
+				addr.value = "";
+		    }
+		    
+		    function postData(){
+		    	var na = document.getElementById("name");
+				var addr = document.getElementById("address");
+				var param = "name="+na.value+"&address="+addr.value;
+				// post 방식에는 ?가 필요없다.
+				
+				getXHR();
+				xhr.open('post', 'paramTest.jsp', true);
+				xhr.onreadystatechange = callback;
+				
+				// post방식으로 데이터를 보낼 때 필요한 부분
+				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+				xhr.send(param); // 여기에 param을 넣음
+				
+				na.value = "";
+				addr.value = "";
+			}
+		    
+		    function callback(){
+				if(xhr.readyState == 4 && xhr.status == 200){
+					var re = document.getElementById("result");
+					re.innerHTML = xhr.responseText;
+				}
+		    }
+		</script>
+	</head>
+	<body>
+		<h1>ajax test</h1>
+		name: <input type="text" id="name"><br>
+		address: <input type="text" id="address"><br>
+		
+		<button onclick="getData()">get data</button>
+		<button onclick="postData()">post data</button>
+		<hr>
+		<div id="result"></div>
+	</body>
+</html>

@@ -1,0 +1,72 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>name length test</title>
+<style type="text/css">
+div{
+	display:inline-block;
+	overflow: auto;
+	border-style: solid;	
+	border-width: 2px;
+	width: 200px;
+	height:200px;
+	
+}
+.red{
+	border-color: red;
+}
+.blue{
+	border-color: blue;
+}
+</style>
+
+</head>
+<body>
+	<p>Please introduce yourself by entering your name in the box below</p>
+	<input type='text' size='24' id='name'></input>&nbsp;
+	<button onclick="checkData()">CHECK</button>
+	<hr>
+	
+	<div id='shortNames' class="red"></div>
+	<div id='longNames'  class="blue"></div>
+</body>
+<script>
+	var na = document.getElementById("name");
+	
+	function checkData(){
+		var param = "?name="+na.value;
+		
+		fetch("nameLengthCheck.jsp"+param)
+		.then(res => res.text())
+		.then(data => callback(data))
+		/* .then(res => res.json())
+		.then(result => {
+			console.log(result)
+			var div;
+			if(result) div = document.getElementById("longNames");
+			else div = document.getElementById("shortNames");
+			
+			var p = document.createElement("p");
+			var txt = document.createTextNode(na.value);
+			p.appendChild(txt);
+			div.appendChild(p);
+			na.value = "";
+		}); */
+		
+	}
+	
+	function callback(re){
+		var re = re.trim(); // 공백제거
+		var shortNames = document.getElementById("shortNames");
+		var longNames = document.getElementById("longNames");
+		
+		if(re == 'false'){
+			shortNames.innerHTML = na.value+"<br>"+shortNames.innerHTML;
+		} else {
+			longNames.innerHTML = na.value+"<br>"+longNames.innerHTML;
+		}
+		
+		document.getElementById("name").value = "";
+	}
+</script>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script>
+		// default는 GET, 비동기 방식
+		fetch('https://reqres.in/api/users') // 비동기 요청 보내기
+		.then(response => response.json()) // 결과가 성공적인 경우 응답 받기
+		.then(json => console.log(json.data))
+		.catch(console.log("catch")) // fetch가 실패했을 때 처리
+	</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>XMLHttpRequest</title>
+		<script>
+		    function getData(){
+				var na = document.getElementById("name");
+				var addr = document.getElementById("address");
+				var param = "?name="+na.value+"&address="+addr.value;
+				
+				fetch("paramTest.jsp" + param) // GET
+				.then(response => response.text()) // 서버가 보내준 응답
+				.then(result => {
+					document.getElementById("result").innerHTML = "<h3>"+result+"</h3>";
+				});
+				
+				na.value = "";
+				addr.value = "";
+		    }
+		    
+		    function postData(){
+		    	var na = document.getElementById("name");
+				var addr = document.getElementById("address");
+				//var param = "name="+na.value+"&address="+addr.value;
+				
+				// parameTest.jsp에서 parameter를 json형식으로 받지 못해서 변환작업을 해줌
+				var pp = new URLSearchParams({
+					name: na.value,
+					address: addr.value
+				})
+				
+				fetch('paramTest.jsp', {
+					method: 'post',
+					headers: {
+						"Content-Type":"application/x-www-form-urlencoded;charset=utf-8"
+					},
+					
+					body: pp
+					
+					// 현재 서버 측이 JSON을 처리할 수 없음
+					// JSON으로 전송하기 때문에 서버인 JSP도 JSON을 해석할 수 있어야 함
+					/* body: JSON.stringify({
+						name: na.value, 
+						address: addr.value
+					}) */
+				}) // POST
+				.then(response => response.text())
+				.then(result => {
+					document.getElementById("result").innerHTML = "<h1>"+result+"</h1>";
+				})
+				
+				na.value = "";
+				addr.value = "";
+			}
+		    
+		</script>
+	</head>
+	<body>
+		<h1>ajax test</h1>
+		name: <input type="text" id="name"><br>
+		address: <input type="text" id="address"><br>
+		
+		<button onclick="getData()">get data</button>
+		<button onclick="postData()">post data</button>
+		<hr>
+		<div id="result"></div>
+	</body>
+</html>

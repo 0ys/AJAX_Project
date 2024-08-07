@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>XMLHttpRequest</title>
+		<script>
+		    var xhr = null;
+		    function getXHR(){
+				xhr = new XMLHttpRequest();
+			}
+		    
+		    function getData(){
+				getXHR(); // XHR 객체를 만듦 : 비동기 통신을 하는 객체
+				
+				// 1. 서버에 요청을 보내기 위한 준비
+				// open(GET 방식, 서버주소, 비동기방식여부)
+				xhr.open('get', 'firstText.txt', true);
+				
+				// xhr 객체의 readyState라는 값이 바뀔 때마다 실행할 함수를 등록
+				xhr.onreadystatechange = callback; // 이름만 등록!
+				// 생성 즉시에는 0 -> open 호출시 1 -> send 호출시 2
+				// -> 데이터 일부를 받아오면 3 -> 데이터 전부를 받으면 4
+				
+				// 2. 서버에 요청을 전송
+				xhr.send(null); // GET 방식일 때 반드시 null
+		    }
+		    
+		    function callback(){ // 특정 조건마다 알아서 호출되는 함수 = 콜백 함수
+				if(xhr.readyState == 4 && xhr.status == 200){
+					var re = document.getElementById("result");
+					re.innerHTML = xhr.responseText; // 서버로부터 응답된 문자열 데이터를 보유
+					// responseXML : 서버로부터 응답된 xml 데이터를 보유, DOM 객체로 파싱할 수 있음
+				} else {
+					// 로딩중..
+				}
+		    }
+		    
+		    function postData(){
+				getXHR();
+				// post 방식
+				xhr.open('post', 'firstText.txt', true);
+				xhr.onreadystatechange = callback;
+				xhr.send(null); 
+			}
+		</script>
+	</head>
+	<body>
+		<h1>ajax test</h1>
+		<button onclick="getData()">get data</button>
+		<button onclick="postData()">post data</button>
+		<hr>
+		<div id="result"></div>
+	</body>
+</html>
